@@ -5,11 +5,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR #1499 code (SuperDrak fork)
+      - name: Checkout tg-links (PR #1499 + TS fix)
         uses: actions/checkout@v4
         with:
-          repository: SuperDrak/postiz-app
-          ref: feature/add-telegram-text-formats
+          ref: tg-links
           fetch-depth: 0
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
