@@ -1,9 +1,15 @@
 name: Build TG-Links
 on:
   workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout tg-links (PR #1499 + TS fix)
         uses: actions/checkout@v4
