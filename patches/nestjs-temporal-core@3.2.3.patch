@@ -1,0 +1,61 @@
+diff --git a/dist/providers/temporal-connection.factory.js b/dist/providers/temporal-connection.factory.js
+index 5d65103fa88395400571225d74e2f7e1129605a5..5c9ef163c55738d300d0ff0a2ae933294699f586 100644
+--- a/dist/providers/temporal-connection.factory.js
++++ b/dist/providers/temporal-connection.factory.js
+@@ -128,28 +128,36 @@ let TemporalConnectionFactory = TemporalConnectionFactory_1 = class TemporalConn
+         }
+     }
+     async createNewWorkerConnection(options, connectionKey) {
+-        try {
+-            this.logger.debug(`Creating new worker connection to ${options.connection.address}`);
+-            const { NativeConnection } = await Promise.resolve().then(() => require('@temporalio/worker'));
+-            const address = options.connection.address;
+-            const connectOptions = {
+-                address,
+-                tls: options.connection.tls,
+-            };
+-            if (options.connection.apiKey) {
+-                connectOptions.metadata = {
+-                    ...(options.connection.metadata || {}),
+-                    authorization: `Bearer ${options.connection.apiKey}`,
++        const maxAttempts = 12;
++        const retryDelayMs = 5000;
++        const address = options.connection.address;
++        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
++            try {
++                this.logger.debug(`Creating new worker connection to ${address} (attempt ${attempt}/${maxAttempts})`);
++                const { NativeConnection } = await Promise.resolve().then(() => require('@temporalio/worker'));
++                const connectOptions = {
++                    address,
++                    tls: options.connection.tls,
+                 };
++                if (options.connection.apiKey) {
++                    connectOptions.metadata = {
++                        ...(options.connection.metadata || {}),
++                        authorization: `Bearer ${options.connection.apiKey}`,
++                    };
++                }
++                const connection = await NativeConnection.connect(connectOptions);
++                this.workerConnectionCache.set(connectionKey, connection);
++                this.logger.info(`Worker connection established to ${address}`);
++                return connection;
++            }
++            catch (error) {
++                if (attempt === maxAttempts) {
++                    this.logger.error(`Worker connection to ${address} failed after ${maxAttempts} attempts`, error);
++                    throw error;
++                }
++                this.logger.warn(`Worker connection to ${address} failed; retrying in ${retryDelayMs}ms`, error);
++                await this.delay(retryDelayMs);
+             }
+-            const connection = await NativeConnection.connect(connectOptions);
+-            this.workerConnectionCache.set(connectionKey, connection);
+-            this.logger.info(`Worker connection established to ${address}`);
+-            return connection;
+-        }
+-        catch (error) {
+-            this.logger.warn('Failed to create worker connection, returning null', error);
+-            return null;
+         }
+     }
+     getConnectionKey(connection) {
