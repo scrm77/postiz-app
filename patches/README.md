@@ -6,8 +6,9 @@ The unpatched library returns `null` after one failed worker connection, leaving
 the orchestrator online without task-queue pollers. The patch retries for up to
 one minute and then throws so PM2 can restart the real Node process.
 
-The root build script runs `test:temporal-worker-retry`, so an image cannot be
-built if the patch is missing or no longer behaves as expected.
+The root build script runs `test:runtime-guards`, so an image cannot be built if
+the patch is missing, PM2 goes back to supervising a `pnpm` wrapper, or the
+watchdog script is syntactically invalid.
 
 When updating `nestjs-temporal-core`:
 
