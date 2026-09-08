@@ -4,7 +4,7 @@
 in [Postiz issue #1748](https://github.com/gitroomhq/postiz-app/issues/1748).
 The unpatched library returns `null` after one failed worker connection, leaving
 the orchestrator online without task-queue pollers. The patch retries for up to
-one minute and then throws so PM2 can restart the real Node process.
+one minute and then throws instead of leaving a false-positive healthy process.
 
 The root build script runs `test:runtime-guards`, so an image cannot be built if
 the patch is missing, PM2 goes back to supervising a `pnpm` wrapper, or the
