@@ -12,6 +12,11 @@ overrides:
   '@types/react': 19.1.8
   '@types/react-dom': 19.1.6
 
+patchedDependencies:
+  nestjs-temporal-core@3.2.3:
+    hash: 4b05acb46660f59cbc8684a7f033e00b332b324e851225614b867ddb22dd0eee
+    path: patches/nestjs-temporal-core@3.2.3.patch
+
 importers:
 
   .:
@@ -474,7 +479,7 @@ importers:
         version: 3.0.1(@nestjs/common@11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))
       nestjs-temporal-core:
         specifier: ^3.2.0
-        version: 3.2.3(@nestjs/common@11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.21)(@temporalio/client@1.15.0)(@temporalio/common@1.15.0)(@temporalio/worker@1.15.0(@swc/helpers@0.5.13)(esbuild@0.27.7)(tslib@2.8.1))(@temporalio/workflow@1.15.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+        version: 3.2.3(patch_hash=4b05acb46660f59cbc8684a7f033e00b332b324e851225614b867ddb22dd0eee)(@nestjs/common@11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.21)(@temporalio/client@1.15.0)(@temporalio/common@1.15.0)(@temporalio/worker@1.15.0(@swc/helpers@0.5.13)(esbuild@0.27.7)(tslib@2.8.1))(@temporalio/workflow@1.15.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       next:
         specifier: 16.2.1
         version: 16.2.1(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.58.2)(babel-plugin-macros@3.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.97.3)
@@ -35339,7 +35344,7 @@ snapshots:
       '@nestjs/common': 11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@supercharge/request-ip': 1.2.0
 
-  nestjs-temporal-core@3.2.3(@nestjs/common@11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.21)(@temporalio/client@1.15.0)(@temporalio/common@1.15.0)(@temporalio/worker@1.15.0(@swc/helpers@0.5.13)(esbuild@0.27.7)(tslib@2.8.1))(@temporalio/workflow@1.15.0)(reflect-metadata@0.2.2)(rxjs@7.8.2):
+  nestjs-temporal-core@3.2.3(patch_hash=4b05acb46660f59cbc8684a7f033e00b332b324e851225614b867ddb22dd0eee)(@nestjs/common@11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.21)(@temporalio/client@1.15.0)(@temporalio/common@1.15.0)(@temporalio/worker@1.15.0(@swc/helpers@0.5.13)(esbuild@0.27.7)(tslib@2.8.1))(@temporalio/workflow@1.15.0)(reflect-metadata@0.2.2)(rxjs@7.8.2):
     dependencies:
       '@nestjs/common': 11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.21(@nestjs/common@11.1.21(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.21)(@nestjs/platform-express@11.1.21)(reflect-metadata@0.2.2)(rxjs@7.8.2)
