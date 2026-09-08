@@ -52,7 +52,7 @@ restart_component() {
   app_container=$2
   postgres_container=$3
   failures_file="$STATE/$component-failures"
-  last_restart_file="$STATE/$component-last-restart"
+  last_restart_file="$STATE/container-last-restart"
 
   failures=$(( $(cat "$failures_file" 2>/dev/null || printf '0') + 1 ))
   printf '%s\n' "$failures" > "$failures_file"
@@ -78,12 +78,16 @@ restart_component() {
     fi
   fi
 
-  if docker exec "$app_container" pm2 restart "$component" --update-env >/dev/null 2>&1; then
+  # PM2 restart can race with Nest shutdown hooks and leave an untracked second
+  # process. Restarting the single app container gives Docker ownership of the
+  # full process tree while keeping Temporal and both databases untouched.
+  if docker restart "$app_container" >/dev/null 2>&1; then
     printf '%s\n' "$now" > "$last_restart_file"
-    printf '0\n' > "$failures_file"
-    log "$component: PM2-рестарт выполнен"
+    printf '0\n' > "$STATE/backend-failures"
+    printf '0\n' > "$STATE/orchestrator-failures"
+    log "$component: контейнер Postiz перезапущен"
   else
-    log "$component: PM2-рестарт завершился ошибкой"
+    log "$component: перезапуск контейнера Postiz завершился ошибкой"
   fi
 }
 
